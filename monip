@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# =========================================================================
+# title           : monip 
+# description     : affiche l'IP externe
+# author          : mathieu[@]400iso[.]net
+# date            : 
+# version         : 0.1    
+# usage           : just run it
+# notes           : 
+# Licence         : WTFPL-2 // http://www.wtfpl.net/txt/copying/ 
+# =========================================================================
+
+wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1';
+exit;

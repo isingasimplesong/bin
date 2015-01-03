@@ -1,0 +1,8 @@
+#!/bin/sh
+# afficher le morceau en lecture dans MPD
+
+p="/tmp/mpd.current";
+rm -f $p;
+mpc > $p;
+notify-send  --hint=int:transient:1 -t 5000 -i audio-x-generic "$(sed q $p)";
+exit;

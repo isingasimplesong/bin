@@ -1,0 +1,7 @@
+#!/bin/sh
+sudo service transmission-daemon stop  > /dev/null 2>&1 &&
+echo "Transmission est en cours de rechargement…"&&
+sleep 10 &&
+sudo service transmission-daemon start > /dev/null 2>&1 &&
+echo "Transmission est rechargé ! Amusez-vous bien.";
+exit 0
