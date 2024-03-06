@@ -1,3 +1,3 @@
 # bin
 
-Personal scripts - use at your own risks
+Personal scripts - use at your own risks !
