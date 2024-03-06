@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+"""
+This script automates the process of creating a new project repository on the user's
+local machine and pushing it to their GitHub account. It performs the following tasks:
+
+1. Reads the user's GitHub personal access token from a specified file.
+2. Prompts the user for the name of the new project.
+3. Creates a new project directory in a specified location.
+4. Initializes a Git repository within the new project directory.
+5. Creates a README.md file with basic project information such as name, author, and license.
+6. Adds the files to the Git repository and commits the initial state.
+7. Creates a new repository on the user's GitHub account.
+8. Adds the GitHub repository as a remote and pushes the local changes to the remote repository.
+
+The script requires the requests library for interacting with the GitHub API.
+"""
+
+import os
+import subprocess
+import requests
+
+# Configuration
+GITHUB_TOKEN_FILE = os.path.expanduser("~/.config/github_token")
+GITHUB_USERNAME = "isingasimplesong"
+FULL_NAME = "Mathieu Rousseau"
+LICENSE = "GPLv3"
+PROJECTS_DIR = os.path.expanduser("~/Projets")
+
+
+def read_github_token(file_path):
+    with open(file_path, "r") as f:
+        return f.read().strip()
+
+
+def main():
+    github_token = read_github_token(GITHUB_TOKEN_FILE)
+    project_name = input("Enter project name: ")
+
+    # Créez le répertoire du projet
+    project_path = os.path.join(PROJECTS_DIR, project_name)
+    os.makedirs(project_path)
+
+    # Initialise le dépôt Git
+    subprocess.run(["git", "init"], cwd=project_path)
+
+    # Crée le fichier README.md
+    with open(os.path.join(project_path, "README.md"), "w") as f:
+        f.write(f"# {project_name}\n\n")
+        f.write(f"Author: {FULL_NAME}\n\n")
+        f.write(f"License: {LICENSE}\n")
+
+    # Ajoute les fichiers et les valide
+    subprocess.run(["git", "add", "."], cwd=project_path)
+    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=project_path)
+
+    # Crée le dépôt GitHub
+    headers = {"Authorization": f"token {github_token}"}
+    data = {"name": project_name}
+    response = requests.post("https://api.github.com/user/repos", headers=headers, json=data)
+    response.raise_for_status()
+
+    # Ajoute le dépôt distant et pousse les modifications
+    repo_url = response.json()["ssh_url"]
+    subprocess.run(["git", "remote", "add", "origin", repo_url], cwd=project_path)
+    subprocess.run(["git", "push", "-u", "origin", "main"], cwd=project_path)
+
+    print(f"Project {project_name} created and pushed to GitHub.")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+import math
+import sys
+
+def calculer_entropie(mot_de_passe):
+    N = len(set(mot_de_passe))  # Nombre unique de caractères
+    L = len(mot_de_passe)
+    entropie = L * math.log2(N)
+    return entropie
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        mot_de_passe = sys.argv[1]
+        print(f"L'entropie est: {calculer_entropie(mot_de_passe)} bits")
+    else:
+        print("Veuillez fournir un mot de passe en argument.")
+
