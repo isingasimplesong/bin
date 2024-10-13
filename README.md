@@ -1,3 +1,3 @@
 # Scripts
 
-Un peu de duck tape pour faire tenir la carlingue
+Un peu de duct tape pour faire tenir la carlingue
